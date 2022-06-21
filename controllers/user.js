@@ -27,7 +27,7 @@ exports.login = (req, res, next) => {
             if (!valid) { // boolean et comparaison fausse:
               return res.status(401).json({ error: 'Mot de passe incorrect !' }); // erreur 401 non authorisée
             }
-            res.status(200).json({ // comparaison Vrai 
+            res.status(200).json({ // comparaison Vrai et renvoi du token en json
                 userId: user._id, 
                 token: jwt.sign( // Fonction sign de jsonwebtoken pour encoder le token
                   { userId: user._id }, // user id encodé pour appliqué le bon user id à chaque sauce pour que personne ne puisse modifier la sauce d autrui
