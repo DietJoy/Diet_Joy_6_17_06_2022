@@ -4,7 +4,7 @@ const app = express();
 
 const mongoose = require('mongoose');
 
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/user'); //importation du router
 
 //Connection de l'Api à la base de donnée Mongoose:
 mongoose.connect('mongodb+srv://joy:joy180687@cluster0.v9ywjaz.mongodb.net/Piiquante?retryWrites=true&w=majority')
@@ -28,6 +28,6 @@ app.use((req, res, next) => {
     next(); 
  });
 
- app.use('/api/auth', userRoutes);
+ app.use('/api/auth', userRoutes); // enregistrement du router
 
 module.exports = app;
