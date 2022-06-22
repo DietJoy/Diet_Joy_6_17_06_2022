@@ -4,6 +4,8 @@ const app = express();
 
 const mongoose = require('mongoose');
 
+const path = require('path'); // Importation path de node pour nous donner l'accès au chemin static
+
 const userRoutes = require('./routes/user'); //importation du router
 
 //Connection de l'Api à la base de donnée Mongoose:
@@ -28,6 +30,7 @@ app.use((req, res, next) => {
     next(); 
  });
 */
+app.use('/images', express.static(path.join(__dirname, 'images'))); // Ajout du chemin static vers le dossier images
  app.use('/api/auth', userRoutes); // enregistrement du router
 
 module.exports = app;
