@@ -16,6 +16,11 @@ exports.signup = (req, res, next) => { // fonction assynchrone
     .catch(error => res.status(500).json({ error })); // erreur serveur renvoyée dans un objet
 };
 
+/*
+
+*/
+
+
 exports.login = (req, res, next) => { 
     User.findOne({ email: req.body.email}) // Méthode findOne trouver le user et pour comparer l adresse mail qui est unique avec l adresse mail de l'utilisateur qui tente de se connecter
     .then(user => {
