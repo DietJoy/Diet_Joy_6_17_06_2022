@@ -60,3 +60,31 @@ return res.status(401).json({ message: " Vous n'avez pas le droit !"}) // Si l'u
       })
       .catch(error => res.status(500).json({ error }));
   };
+
+  //Gestion des Likes/Dislikes et retour neutre
+exports.likeSauce = (req, res, next) => {
+  if (req.body.like === 1) { // Si je like
+      Sauce.updateOne( {_id:req.params.id}, { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } })
+      //Avec la méthode de mise à jour, sur la sauce/ On ajoute au tableau des utilsateurs qui aiment l'utilisateur qui a cliqué j aime/  avec l'incopérateur on incrémente le champ like d'un +1
+          .then(() => res.status(200).json({ message: "J'aime cette sauce !"}))
+          .catch(error => res.status(400).json({ error }));
+  } else if (req.body.like === -1) {  // Sinon si je dislike
+      Sauce.updateOne( {_id:req.params.id}, { $push: { usersDisliked: req.body.userId }, $inc: { dislikes: +1 } })
+          .then(() => res.status(200).json({ message: "Je n'aime pas cette sauce !"}))
+          .catch(error => res.status(400).json({ error }));
+  } else {  // Sinon Je n'ai plus d'avis
+      Sauce.findOne({ _id: req.params.id })
+          .then(sauce => {
+          if (sauce.usersLiked.includes(req.body.userId)) { //Si je retire mon like
+              Sauce.updateOne( {_id:req.params.id}, { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } })
+              .then(() => res.status(200).json({ message: "Je n'ai plus d'avis sur cette sauce."}))
+              .catch(error => res.status(400).json({ error }))
+          } else if (sauce.usersDisliked.includes(req.body.userId)) { // Sinon si je retire mon dislike
+              Sauce.updateOne( {_id:req.params.id}, { $pull: { usersDisliked: req.body.userId }, $inc: { dislikes: -1 } })
+              .then(() => res.status(200).json({ message: "Je n'ai plus d'avis sur cette sauce."}))
+              .catch(error => res.status(400).json({ error }))
+          }
+          })
+          .catch(error => res.status(400).json({ error }));
+  }
+};
