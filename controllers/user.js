@@ -17,9 +17,21 @@ exports.signup = (req, res, next) => { // fonction assynchrone
 };
 
 /*
-
+exports.signup = async (req, res, next) => {
+  try {
+    const hash = await bcrypt.hash(req.body.password, 13)
+    const user = new User ({ 
+        email: req.body.email,
+        password: hash 
+      });
+     await user.save() 
+     res.status(201).json({ message: 'Utilisateur créé !' })
+  }
+  catch (error) {
+res.status(500).json({ error })
+  }
+}
 */
-
 
 exports.login = (req, res, next) => { 
     User.findOne({ email: req.body.email}) // Méthode findOne trouver le user et pour comparer l adresse mail qui est unique avec l adresse mail de l'utilisateur qui tente de se connecter
