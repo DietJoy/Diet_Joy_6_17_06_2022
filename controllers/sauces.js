@@ -6,13 +6,15 @@ const fs = require('fs'); // package qui permet d interagir avec le systeme de f
 //Création de sauce avec POST
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
+    /*
+    gérer sauceObject.userId
+    */
     const sauce = new Sauce({
       ...sauceObject,
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // Génération de l'url de l image
     });
     console.log(sauce);
     sauce.save() //enregistre la sauce dans la BDD
-    
       .then(() => res.status(201).json({ message: 'Sauce enregistrée !'}))
       .catch(error => res.status(400).json({ error }));
   };
@@ -33,11 +35,14 @@ exports.getAllSauces = (req, res, next) => {
 
   //Modification de sauce avec PUT
   exports.modifySauce = (req, res, next) => {
+    /* faire une vérif d utilisateur
+    */
     const sauceObject = req.file ? // est ce que req.file existe ?
       {
-        ...JSON.parse(req.body.thing), // si oui on traite la nouvelle image en transformant l objet strignifié en objet JavaScript
+        ...JSON.parse(req.body.sauce), // si oui on traite la nouvelle image en transformant l objet strignifié en objet JavaScript
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` //on concatène et on reconstruit l url complète du fichier enregistré
       } : { ...req.body }; // si non on récupère le corps de la requête en traitant l objet entrant
+    
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id })
       .then(() => res.status(200).json({ message: 'Sauce modifiée !'}))
       .catch(error => res.status(400).json({ error }));
@@ -51,8 +56,10 @@ exports.getAllSauces = (req, res, next) => {
         if (sauce.userId !== req.auth.userId ) { // Vérification de sécurité : est ce que l'utilisateur qui a crée la sauce est différent de celui qui essaye de la supprimer?
 return res.status(401).json({ message: " Vous n'avez pas le droit !"}) // Si l'user est différent renvoie d'une 401
         }
+          
         const filename = sauce.imageUrl.split('/images/')[1]; // on retrouve la sauce grâce à son segment /images/
-        fs.unlink(`images/${filename}`, () => { // fonction unlike du package fs pour supprimer le fichier que l on cherchait
+        
+      fs.unlink(`images/${filename}`, () => { // fonction unlike du package fs pour supprimer le fichier que l on cherchait
           Sauce.deleteOne({ _id: req.params.id }) // on supprime la sauce
             .then(() => res.status(200).json({ message: 'Sauce supprimée !'}))
             .catch(error => res.status(400).json({ error }));

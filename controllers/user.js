@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User= require('../models/User');
-
+/*
 exports.signup = (req, res, next) => { // fonction assynchrone 
     bcrypt.hash(req.body.password, 13) // hashage du mot de passe recupéré par le corps de la requete du frontend et salé 13 fois : 1sec
     .then(hash => { // on récupère le Hash du  mot de passe
@@ -15,8 +15,8 @@ exports.signup = (req, res, next) => { // fonction assynchrone
     })
     .catch(error => res.status(500).json({ error })); // erreur serveur renvoyée dans un objet
 };
+*/
 
-/*
 exports.signup = async (req, res, next) => {
   try {
     const hash = await bcrypt.hash(req.body.password, 13)
@@ -26,12 +26,11 @@ exports.signup = async (req, res, next) => {
       });
      await user.save() 
      res.status(201).json({ message: 'Utilisateur créé !' })
-  }
-  catch (error) {
-res.status(500).json({ error })
+  } catch (error) {
+    res.status(500).json({ error })
   }
 }
-*/
+
 
 exports.login = (req, res, next) => { 
     User.findOne({ email: req.body.email}) // Méthode findOne trouver le user et pour comparer l adresse mail qui est unique avec l adresse mail de l'utilisateur qui tente de se connecter

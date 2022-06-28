@@ -4,19 +4,19 @@ const passwordSchema = new passwordValidator();
 
 passwordSchema
   .is()
-  .min(8, "minimum 6 ") // Minimum length 6
+  .min(6, "minimum 6 ") // Minimum length 6
   .is()
   .max(20, "max 30") // Maximum length 30
-  .has()
-  .uppercase("1", "Majus") // Must have uppercase letters
   .has()
   .lowercase("1", "mini") // Must have lowercase letters
   .has()
   .not()
-  .spaces() // Should not have spaces
+  .spaces(); // Should not have spaces
+  /*
   .is()
   .not()
   .oneOf(["Passw0rd", "Password123", "Azerty", "Azerty123" , "Piiquante"]); // Blacklist these values;
+  */
 
 // Vérification de la qualité du password par rapport au schéma
 
