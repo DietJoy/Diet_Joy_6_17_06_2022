@@ -7,7 +7,7 @@ const sauceSchema = mongoose.Schema({
     description: { type: String, required: true }, //description de la sauce
     mainPepper: { type: String, required: true }, //le principal ingrédient épicé de la sauce
     imageUrl: { type: String, required: true }, //l'url de l'image de la sauce téléchargée par l'utilisateur
-    heat: { type: Number, required: true }, // Nombre entre 1 et 10 décrivant la sauce
+    heat: { type: Number, required: true, min: 0, max: 10 }, // Nombre entre 1 et 10 décrivant la sauce
     likes: { type: Number, default: 0,  required: true }, // Nombre d'utilisateurs qui likent la sauce
     dislikes: { type: Number, default: 0, required: true }, // Nombre d'utilisateurs qui dislikent la sauce
     usersLiked: { type: [String], default: [], required: true}, // tableau des identifiants des utilisateurs qui ont aimé la sauce
