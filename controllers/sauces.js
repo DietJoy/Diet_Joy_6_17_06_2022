@@ -5,12 +5,13 @@ const fs = require('fs'); // package qui permet d interagir avec le systeme de f
 
 //Création de sauce avec POST
 exports.createSauce = (req, res, next) => {
-    const sauceObject = JSON.parse(req.body.sauce);
+    const sauceObject = JSON.parse(req.body.sauce); // Extraire l'objet en Json du corps de la requete = objet utilisable
     /*
     gérer sauceObject.userId
+     userId: req.auth.userId,
     */
     const sauce = new Sauce({
-      ...sauceObject,
+      ...sauceObject, // Spread = copie de tous les éléments de req.body
       imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}` // Génération de l'url de l image
     });
     console.log(sauce);
@@ -36,6 +37,14 @@ exports.getAllSauces = (req, res, next) => {
   //Modification de sauce avec PUT
   exports.modifySauce = (req, res, next) => {
     /* faire une vérif d utilisateur
+    Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      if (!sauce) {
+        res.status(404).json({ error: new Error("Objet non trouvé") });
+      }
+      if (sauce.userId !== req.auth.userId) {
+        // compare Userid de la bdb avec userId de la requete d'authentification
+        res.status(403).json({ error: new Error("Requete non authorisée") });
     */
     const sauceObject = req.file ? // est ce que req.file existe ?
       {
@@ -70,6 +79,16 @@ return res.status(401).json({ message: " Vous n'avez pas le droit !"}) // Si l'u
 
   //Gestion des Likes/Dislikes et retour neutre
 exports.likeSauce = (req, res, next) => {
+  /*
+  // Chercher si l'utilisateur a déjà liker et veut re donner un like à la sauce
+  if (sauce.userLiked.includes(req.body.userId)&& req.body.like ===1) {
+    res.status(409).json({ message: "Tu ne peux aimer qu'une seule fois cette sauce"}); // conflit
+  }
+  //Chercher si l'utilisateur a dejà disliker et veut re donner un dislike à la sauce
+  if ( sauce.userDisliked.includes(req.body.userId)&& req.body.like === -1) {
+    res.status(409).json({ message: "Tu ne peux disliker qu'une seule fois cette sauce"}); //conflit
+  }
+  */
   if (req.body.like === 1) { // Si je like
       Sauce.updateOne( {_id:req.params.id}, { $push: { usersLiked: req.body.userId }, $inc: { likes: +1 } })
       //Avec la méthode de mise à jour, sur la sauce/ On ajoute au tableau des utilsateurs qui aiment l'utilisateur qui a cliqué j aime/  avec l'incopérateur on incrémente le champ like d'un +1
