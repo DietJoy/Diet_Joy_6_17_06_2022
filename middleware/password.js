@@ -12,6 +12,7 @@ passwordSchema
   .has()
   .not()
   .spaces(); // Should not have spaces
+  
   /*
   .is()
   .not()
