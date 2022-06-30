@@ -1,7 +1,5 @@
 const Sauce = require("../models/sauces");
-
 const fs = require('fs'); // package qui permet d interagir avec le systeme de fichiers du serveur
-
 
 //Création de sauce avec POST
 exports.createSauce = (req, res, next) => {
@@ -9,7 +7,7 @@ exports.createSauce = (req, res, next) => {
 
     const sauce = new Sauce({
       ...sauceObject, // Spread = copie de tous les éléments de req.body
-      userId:req.auth.userId, 
+      userId:req.auth.userId, //vérif de l'utilisateur
       likes: 0,
       dislikes: 0,
       userLiked: [],
@@ -22,21 +20,21 @@ exports.createSauce = (req, res, next) => {
       .catch(error => res.status(400).json({ error }));
   };
 
-  //Affichage d'une sauce par son id avec GET
+//Affichage d'une sauce par son id avec GET
   exports.getOneSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id }) // cherche 1 objet dans la bdd ayant _id qui est le même que l id dans le corps de la requete
       .then((sauce) => res.status(200).json(sauce))
       .catch((error) => res.status(404).json({ error }));
   };
 
-  // Affichage de toutes les sauces avec GET
+// Affichage de toutes les sauces avec GET
 exports.getAllSauces = (req, res, next) => {
   Sauce.find() // cherche toutes les sauces dans le BDD avec moongose
     .then((sauces) => res.status(200).json(sauces))
     .catch((error) => error.status(500).json({ error }));
 };
 
-  //Modification de sauce avec PUT
+//Modification de sauce avec PUT
 exports.modifySauce = (req, res, next) => {
 
   Sauce.findOne({ _id: req.params.id })
@@ -86,7 +84,7 @@ exports.modifySauce = (req, res, next) => {
     });
 };
 
-  //Supression d'une sauce avec DELETE
+//Supression d'une sauce avec DELETE
   exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id }) // on utilise l id que nous recevons en parametre pour acceder à la sauce de la BDD
       .then(sauce => {
@@ -105,7 +103,7 @@ return res.status(401).json({ message: " Vous n'avez pas le droit !"}) // Si l'u
       .catch(error => res.status(500).json({ error }));
   };
 
-  //Gestion des Likes/Dislikes et retour neutre
+//Gestion des Likes/Dislikes et retour neutre
   exports.likeSauce = async (req, res, next) => {
 
     const tokenUserId = req.auth.userId; // constante d'authentification d'utilisateur valable partout

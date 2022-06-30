@@ -1,33 +1,19 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User= require('../models/User');
-/*
-exports.signup = (req, res, next) => { // fonction assynchrone 
-    bcrypt.hash(req.body.password, 13) // hashage du mot de passe recupéré par le corps de la requete du frontend et salé 13 fois : 1sec
-    .then(hash => { // on récupère le Hash du  mot de passe
-      const user = new User({  // on utlise le hash enregistré dans un nouvel utilisteur
+
+
+exports.signup = async (req, res, next) => { // fonction assynchrone 
+  try {
+    const hash = await bcrypt.hash(req.body.password, 13) // hashage du mot de passe recupéré par le corps de la requete du frontend et salé 13 fois : 1sec
+    const user = new User ({ 
         email: req.body.email, // on utlise l'adresse fourni dans le corps de la requete
         password: hash // avec le mot de passe hashé
       });
-      user.save()  // on utilise la méthode save pour enregistrer l'utilisateur dans la base de donnée 
-        .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
-        .catch(error => res.status(400).json({ error }));
-    })
-    .catch(error => res.status(500).json({ error })); // erreur serveur renvoyée dans un objet
-};
-*/
-
-exports.signup = async (req, res, next) => {
-  try {
-    const hash = await bcrypt.hash(req.body.password, 13)
-    const user = new User ({ 
-        email: req.body.email,
-        password: hash 
-      });
-     await user.save() 
+    await user.save() // on utilise la méthode save pour enregistrer l'utilisateur dans la base de donnée
      res.status(201).json({ message: 'Utilisateur créé !' })
   } catch (error) {
-    res.status(500).json({ error })
+     res.status(500).json({ error }) // erreur serveur renvoyée dans un objet
   }
 }
 

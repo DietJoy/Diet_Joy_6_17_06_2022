@@ -1,19 +1,19 @@
-const passwordValidator = require("password-validator");
+const passwordValidator = require('password-validator');
 
 const passwordSchema = new passwordValidator();
 
 passwordSchema
   .is()
-  .min(6, "minimum 6 ") // Minimum length 6
+  .min(6, 'minimum 6 ') // Minimum length 6
   .is()
-  .max(20, "max 30") // Maximum length 30
+  .max(20, 'max 30') // Maximum length 30
   .has()
-  .lowercase("1", "mini") // Must have lowercase letters
+  .lowercase('1', 'mini') // Must have lowercase letters
   .has()
   .not()
   .spaces(); // Should not have spaces
-  
-  /*
+
+/*
   .is()
   .not()
   .oneOf(["Passw0rd", "Password123", "Azerty", "Azerty123" , "Piiquante"]); // Blacklist these values;
@@ -24,10 +24,13 @@ passwordSchema
 module.exports = (req, res, next) => {
   const password = req.body.password;
 
-  if (passwordSchema.validate(password)) { // Si le mot de passe correspond au schema de validation ok next
+  if (passwordSchema.validate(password)) {
+    // Si le mot de passe correspond au schema de validation ok next
     return next();
   } else {
-    return res.status(400).json({ error: passwordSchema.validate(password, { list: true }) });
+    return res
+      .status(400)
+      .json({error: passwordSchema.validate(password, {list: true})});
   }
 };
 
