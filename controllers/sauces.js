@@ -68,14 +68,14 @@ exports.modifySauce = (req, res, next) => {
       Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }) //on met à jour
         .then(() => {
           fs.unlink("images/" + sauce.imageUrl.split("/images/")[1], err => { //on supprime l'image qu'on avait initialement publiée du dossier image
-            if (err) throw err;
+            if (err) console.log({errfirst: err}) ;
           });
           res.status(200).json({ message: 'Sauce modifiée !' });
         })
         .catch(error => {
           if (req.file) { // Si il y avait une image dans la tentative de publication qui a échouée
             fs.unlink("images/" + req.file.filename, err => { // on supprime l'image qu on a tenté de publiée qui s est automatiquement enregistrée dans le dossier image
-              if (err) console.log(err);
+              if (err) console.log({errsecond: err});
             });
           }
 
