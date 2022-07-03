@@ -1,5 +1,5 @@
 # Diet_Joy_6_17_06_2022
-Projet 6 du parcours Openclassrooms Developpeur Web : Construisez une API sécurisée pour une application d'avis gastronomiques
+Projet 6 du parcours Openclassrooms Developpeur Web : Construire une API sécurisée pour une application d'avis gastronomiques
 
 BACKEND
 

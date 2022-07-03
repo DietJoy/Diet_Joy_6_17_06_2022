@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const helmet = require("helmet"); // Helmet aide à sécuriser Express
 const mongoose = require('mongoose');
+require('dotenv').config()
 
 const path = require('path'); // Importation path de node pour nous donner l'accès au chemin static
 
@@ -20,7 +21,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 //Connection de l'Api à la base de donnée Mongoose:
-mongoose.connect('mongodb+srv://joy:joy180687@cluster0.v9ywjaz.mongodb.net/Piiquante?retryWrites=true&w=majority')
+mongoose.connect(process.env.MONGODB_CONNECT)
   .then(() => console.log('Connexion à MongoDB réussie !'))
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 

@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User= require('../models/User');
+require('dotenv').config()
 
 
 exports.signup = async (req, res, next) => { // fonction assynchrone 
@@ -33,7 +34,7 @@ exports.login = (req, res, next) => {
                 userId: user._id, 
                 token: jwt.sign( // Fonction sign de jsonwebtoken pour encoder le token
                   { userId: user._id }, // user id encodé pour appliqué le bon user id à chaque sauce pour que personne ne puisse modifier la sauce d autrui
-                  'EUxExYQzt4fGBkQzwC', // Chaine secrète
+                  process.env.TOKEN_SECRET, // Chaine secrète
                   { expiresIn: '24h' }
               )
             });
